@@ -46,22 +46,8 @@ body {
     height: 518px;
 }
 
-@media (min-width: 640px) {
-    .scroll-container .list .movie-item {
-        height: 264px;
-    }
-}
-
-@media (min-width: 768px) {
-    .scroll-container .list .movie-item {
-        height: 575px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .scroll-container .list .movie-item {
-        height: 476px;
-    }
+.img-max-height {
+    max-height: 400px;
 }
 
 .tombstone .list {
@@ -69,20 +55,38 @@ body {
 }
 
 @media (min-width: 640px) {
+    .scroll-container .list .movie-item {
+        height: 264px;
+    }
     .tombstone .list {
         width: 45vw
+    }
+    .img-max-height {
+        max-height: 365px;
     }
 }
 
 @media (min-width: 768px) {
+    .scroll-container .list .movie-item {
+        height: 575px;
+    }
     .tombstone .list {
         width: 30vw
+    }
+    .img-max-height {
+        max-height: 430px;
     }
 }
 
 @media (min-width: 1024px) {
+    .scroll-container .list .movie-item {
+        height: 476px;
+    }
     .tombstone .list {
         width: 15vw
+    }
+    .img-max-height {
+        max-height: 244px;
     }
 }
 
@@ -94,25 +98,3 @@ body {
      height: 100%;
 }
  */
-
-.img-max-height {
-    max-height: 400px;
-}
-
-@media (min-width: 640px) {
-    .img-max-height {
-        max-height: 365px;
-    }
-}
-
-@media (min-width: 768px) {
-    .img-max-height {
-        max-height: 430px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .img-max-height {
-        max-height: 244px;
-    }
-}
