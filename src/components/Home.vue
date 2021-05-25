@@ -1,5 +1,6 @@
 <template>
-  <div id="app">
+  <div class="scroll-container">
+  
     <vue-recyclist
       class="list"
       :list="list"
@@ -7,27 +8,44 @@
       :size="size"
       :loadmore="loadmore"
       :tombstone="tombstone"
-      :nomore ="eod"
+      :spinner="true"
+      :nomore="eod"
     >
       <template slot="tombstone">
-        <div class="item tombstone">
-          <div class="bubble">
-            <p></p>
-            <p></p>
-            <p></p>
+        <div class="h-100 w-screen pb-4" >
+          <div class="">
+            <div class="movie-item bg-clip-padding bg-gray-100 border-1 border-gray-200 border-solid grid grid-cols-2 gap-4">
+              <div class="img h-50 w-full bg-gray-300 mb-2">
+              </div>
+              <div class="pt-4 pb-4">
+                <div class="h-5 bg-gray-300 mb-2"></div>
+                <div class="h-5 bg-gray-300 mb-2"></div>
+                <div class="h-5 bg-gray-300 mb-2"></div>
+              </div>
+            </div>
           </div>
         </div>
       </template>
       <template slot="item" scope="props">
-        <div :id="props.data.id" class="item">
-          <div class="bubble">
-            <div>{{ props.data.title }}</div>
-            <div>{{ props.data.imDbRating }}</div>
-            <div>{{ props.data.id }}</div>
+        <div :id="props.data.id" class="w-screen pb-4">
+          <div class="">
+            <div class="movie-item bg-clip-padding bg-gray-100 border-1 border-gray-200 border-solid grid grid-cols-2 gap-4">
+              <div class="img w-full">
+                <img
+                  class="object-contain h-20 w-full"
+                  :src="props.data.image"
+                />
+              </div>
+              <div class="pt-4 pb-4">
+                <div class="font-bold text-xl">{{ props.data.title }} ({{ props.data.year }})</div>
+                <div class="">Rating {{ props.data.imDbRating }}</div>
+                <div class="italic">{{ props.data.crew }}</div>
+              </div>
+            </div>
           </div>
         </div>
       </template>
-      <!--<div slot="spinner">Loading Data</div>-->
+      <div slot="spinner">Loading Data</div>
       <div slot="nomore">End of records</div>
     </vue-recyclist>
   </div>
@@ -38,7 +56,7 @@
 import Data from "./data";
 import VueRecyclist from "vue-recyclist";
 export default {
-  name: "Example",
+  name: "Home",
   data() {
     return {
       list: [],
@@ -52,9 +70,7 @@ export default {
   components: {
     "vue-recyclist": VueRecyclist,
   },
-  watch: {
-    
-  },
+  watch: {},
   methods: {
     getMovies() {
       // not using api since its got limit 100 api call per day
@@ -81,16 +97,16 @@ export default {
       setTimeout(() => {
         if (this.eod == false) {
           this.list = this.movieList.slice(0, this.size * this.page);
-          if (this.size * this.page > this.movieList.length){
+          if (this.size * this.page > this.movieList.length) {
             this.eod = true;
-          }else if (this.size * (this.page+1) > this.movieList.length){
+          } else if (this.size * (this.page + 1) > this.movieList.length) {
             this.tombstone = false;
             this.eod = true;
           }
 
           this.page++;
         }
-          console.log(this.list.length);
+        console.log(this.list.length);
       }, 1000);
     },
   },

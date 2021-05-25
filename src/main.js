@@ -5,13 +5,15 @@ import './assets/css/main.css'
 
 import Home from './components/Home.vue'
 import About from './components/About.vue'
+import Basic from './components/Basic.vue'
 
 Vue.config.productionTip = false
 
 const router = new VueRouter({
   routes: [
     { path: '/', component: Home },
-    { path: '/about', component: About }
+    { path: '/about', component: About },
+    { path: '/basic', component: Basic }
   ]
 })
 
