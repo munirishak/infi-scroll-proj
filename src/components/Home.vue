@@ -12,13 +12,80 @@
       :nomore="eod"
     >
       <template slot="tombstone">
-        <div class="h-100 w-screen pb-4" >
-          <div class="">
-            <div class="movie-item bg-clip-padding bg-gray-100 border-1 border-gray-200 border-solid grid grid-cols-2 gap-4">
-              <div class="img h-50 w-full bg-gray-300 mb-2">
-              </div>
-              <div class="pt-4 pb-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4 tombstone">
+          <div
+            class="list shadow bg-clip-padding bg-white rounded-lg overflow-hidden"
+          >
+            <div
+              class="movie-item grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4"
+            >
+              <div class="img h-50 w-full bg-gray-300 mb-2"></div>
+              <div class="p-4 h-full">
                 <div class="h-5 bg-gray-300 mb-2"></div>
+                <div class="h-5 bg-gray-300 mb-2"></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="list shadow bg-clip-padding bg-white rounded-lg overflow-hidden"
+          >
+            <div
+              class="movie-item grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4"
+            >
+              <div class="img h-50 w-full bg-gray-300 mb-2"></div>
+              <div class="p-4 h-full">
+                <div class="h-5 bg-gray-300 mb-2"></div>
+                <div class="h-5 bg-gray-300 mb-2"></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="list shadow bg-clip-padding bg-white rounded-lg overflow-hidden"
+          >
+            <div
+              class="movie-item grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4"
+            >
+              <div class="img h-50 w-full bg-gray-300 mb-2"></div>
+              <div class="p-4 h-full">
+                <div class="h-5 bg-gray-300 mb-2"></div>
+                <div class="h-5 bg-gray-300 mb-2"></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="list shadow bg-clip-padding bg-white rounded-lg overflow-hidden"
+          >
+            <div
+              class="movie-item grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4"
+            >
+              <div class="img h-50 w-full bg-gray-300 mb-2"></div>
+              <div class="p-4 h-full">
+                <div class="h-5 bg-gray-300 mb-2"></div>
+                <div class="h-5 bg-gray-300 mb-2"></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="list shadow bg-clip-padding bg-white rounded-lg overflow-hidden"
+          >
+            <div
+              class="movie-item grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4"
+            >
+              <div class="img h-50 w-full bg-gray-300 mb-2"></div>
+              <div class="p-4 h-full">
+                <div class="h-5 bg-gray-300 mb-2"></div>
+                <div class="h-5 bg-gray-300 mb-2"></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="list shadow bg-clip-padding bg-white rounded-lg overflow-hidden"
+          >
+            <div
+              class="movie-item grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4"
+            >
+              <div class="img h-50 w-full bg-gray-300 mb-2"></div>
+              <div class="p-4 h-full">
                 <div class="h-5 bg-gray-300 mb-2"></div>
                 <div class="h-5 bg-gray-300 mb-2"></div>
               </div>
@@ -27,19 +94,24 @@
         </div>
       </template>
       <template slot="item" scope="props">
-        <div :id="props.data.id" class="w-screen pb-4">
-          <div class="">
-            <div class="movie-item bg-clip-padding bg-gray-100 border-1 border-gray-200 border-solid grid grid-cols-2 gap-4">
-              <div class="img w-full">
-                <img
-                  class="object-contain h-20 w-full"
-                  :src="props.data.image"
-                />
+        <div v-if="props.data.mv != undefined" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4">
+          <div
+            v-for="item in props.data.mv"
+            :key="item.id"
+            class="list shadow bg-clip-padding bg-white rounded-lg overflow-hidden"
+          >
+            <div
+              class="movie-item grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4"
+            >
+              <div class="img h-full img-max-height overflow-hidden relative">
+                <img class="object-fit" :src="item.image" />
+                <div class="absolute top-0 left-0 p-3 bg-clip-padding bg-yellow-500 font-extrabold rounded-br-lg text-white">{{ item.imDbRating }}</div>
               </div>
-              <div class="pt-4 pb-4">
-                <div class="font-bold text-xl">{{ props.data.title }} ({{ props.data.year }})</div>
-                <div class="">Rating {{ props.data.imDbRating }}</div>
-                <div class="italic">{{ props.data.crew }}</div>
+              <div class="p-4 h-full">
+                <div class="font-bold text-xl">
+                  {{ item.title }} ({{ item.year }})
+                </div>
+                <div class="italic overflow-ellipsis">{{ item.crew }}</div>
               </div>
             </div>
           </div>
@@ -65,6 +137,7 @@ export default {
       eod: false,
       movieList: [],
       tombstone: true,
+      tombstoneDummy: ["","","","","",""]
     };
   },
   components: {
@@ -91,7 +164,16 @@ export default {
       //     console.error(error);
       //   });
 
-      this.movieList = Data.items;
+      for(var i=0;i<Data.items.length;i= i+6){
+        var data = {
+          mv: []
+        };
+
+        for(var r=i;r<i+6;r++){
+          data.mv.push(Data.items[r]);
+        }
+        this.movieList.push(data);
+      }
     },
     loadmore() {
       setTimeout(() => {
@@ -106,7 +188,6 @@ export default {
 
           this.page++;
         }
-        console.log(this.list.length);
       }, 1000);
     },
   },
