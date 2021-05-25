@@ -4,6 +4,7 @@
 
 html {
     height: 100%;
+    width: 100%;
   }
   
   body {
@@ -34,20 +35,41 @@ html {
     height: 100%;
     margin: 0 auto;
     padding: 0;
-    border: 1px solid #ddd;
     list-style-type: none;
     text-align: center;
-    background: #eee;
   }
   .scroll-container .list .movie-item {
     height: 300px;
   }
 
-  .list .movie-item .img{
+  .scroll-container  .list .movie-item .img{
     height: inherit;
   }
 
-  .list .movie-item img{
+  .scroll-container .list .movie-item img{
     height: 100%;
   }
-  
+
+  .img-max-height{
+    max-height: 400px;
+  }
+
+
+@media (min-width: 640px){
+    .img-max-height{
+        max-height: 365px;
+    }
+}
+
+
+@media (min-width: 768px){
+    .img-max-height{
+        max-height: 430px;
+    }
+  }
+
+  @media (min-width: 1024px){
+    .img-max-height{
+        max-height: 244px;
+    }
+  }

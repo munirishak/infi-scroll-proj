@@ -1,23 +1,23 @@
 <template>
   <div class="scroll-basic-container" id="scrollContainer">
-    <div id="contentContainer" class="grid grid-cols-2 md:grid-cols-6 gap-4">
+    <div id="contentContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4">
       <div
         v-for="item in list"
         :key="item.id"
-        class="list bg-gray-100"
+        class="list shadow bg-clip-padding bg-white rounded-lg overflow-hidden"
       >
         <div
-          class="movie-item h-full bg-clip-padding border-1 border-gray-200 border-solid grid grid-cols-2 md:grid-cols-1 gap-4"
+          class="movie-item grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4"
         >
-          <div class="img w-full">
-            <img class="object-contain h-20 w-full" :src="item.image" />
+          <div class="img h-full img-max-height overflow-hidden relative">
+            <img class="object-fit" :src="item.image" />
+            <div class="absolute top-0 left-0 p-3 bg-clip-padding bg-yellow-500 font-extrabold rounded-br-lg text-white">{{ item.imDbRating }}</div>
           </div>
-          <div class="p-4">
+          <div class="p-4 h-full">
             <div class="font-bold text-xl">
               {{ item.title }} ({{ item.year }})
             </div>
-            <div class="">Rating {{ item.imDbRating }}</div>
-            <div class="italic">{{ item.crew }}</div>
+            <div class="italic overflow-ellipsis">{{ item.crew }}</div>
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@ export default {
       let scrollContainer = document.getElementById("scrollContainer");
       let contentContainer = document.getElementById("contentContainer");
       scrollContainer.onscroll = () => {
-        if ((scrollContainer.scrollTop+scrollContainer.offsetHeight) >= contentContainer.offsetHeight - 100) {
+        if ((scrollContainer.scrollTop+scrollContainer.offsetHeight) >= (contentContainer.offsetHeight*0.70)) {
           this.loadmore();
         }
       };
