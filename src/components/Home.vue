@@ -1,6 +1,5 @@
 <template>
   <div class="scroll-container">
-  
     <vue-recyclist
       class="list"
       :list="list"
@@ -12,7 +11,9 @@
       :nomore="eod"
     >
       <template slot="tombstone">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4 tombstone">
+        <div
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4 tombstone"
+        >
           <div
             class="list shadow bg-clip-padding bg-white rounded-lg overflow-hidden"
           >
@@ -94,7 +95,10 @@
         </div>
       </template>
       <template slot="item" scope="props">
-        <div v-if="props.data.mv != undefined" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4">
+        <div
+          v-if="props.data.mv != undefined"
+          class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4"
+        >
           <div
             v-for="item in props.data.mv"
             :key="item.id"
@@ -105,7 +109,11 @@
             >
               <div class="img h-full img-max-height overflow-hidden relative">
                 <img class="object-fit" :src="item.image" />
-                <div class="absolute top-0 left-0 p-3 bg-clip-padding bg-yellow-500 font-extrabold rounded-br-lg text-white">{{ item.imDbRating }}</div>
+                <div
+                  class="absolute top-0 left-0 p-3 bg-clip-padding bg-yellow-500 font-extrabold rounded-br-lg text-white"
+                >
+                  {{ item.imDbRating }}
+                </div>
               </div>
               <div class="p-4 h-full">
                 <div class="font-bold text-xl">
@@ -126,6 +134,7 @@
 <script>
 // import axios from "axios";
 import Data from "./data";
+import Stats from "./stats.min";
 import VueRecyclist from "vue-recyclist";
 export default {
   name: "Home",
@@ -137,8 +146,11 @@ export default {
       eod: false,
       movieList: [],
       tombstone: true,
-      tombstoneDummy: ["","","","","",""]
+      tombstoneDummy: ["", "", "", "", "", ""],
     };
+  },
+  created() {
+    this.addStatsPanel();
   },
   components: {
     "vue-recyclist": VueRecyclist,
@@ -164,31 +176,60 @@ export default {
       //     console.error(error);
       //   });
 
-      for(var i=0;i<Data.items.length;i= i+6){
+      for (var i = 0; i < Data.items.length; i = i + 6) {
         var data = {
-          mv: []
+          mv: [],
         };
 
-        for(var r=i;r<i+6;r++){
+        for (var r = i; r < i + 6; r++) {
           data.mv.push(Data.items[r]);
         }
         this.movieList.push(data);
       }
     },
     loadmore() {
-      setTimeout(() => {
-        if (this.eod == false) {
-          this.list = this.movieList.slice(0, this.size * this.page);
-          if (this.size * this.page > this.movieList.length) {
-            this.eod = true;
-          } else if (this.size * (this.page + 1) > this.movieList.length) {
-            this.tombstone = false;
-            this.eod = true;
-          }
-
-          this.page++;
+      // setTimeout(() => {
+      if (this.eod == false) {
+        this.list = this.movieList.slice(0, this.size * this.page);
+        if (this.size * this.page > this.movieList.length) {
+          this.eod = true;
+        } else if (this.size * (this.page + 1) > this.movieList.length) {
+          this.tombstone = false;
+          this.eod = true;
         }
-      }, 1000);
+
+        this.page++;
+      }
+      console.log("i need more!");
+      // }, 1000);
+    },
+    addStatsPanel() {
+      if (window.requestIdleCallback) {
+        let self = this;
+        let stats = new Stats();
+        let domPanel = new Stats.Panel("D", "#0ff", "#002");
+        stats.addPanel(domPanel);
+        stats.showPanel(3);
+        document.body.appendChild(stats.dom);
+        setTimeout(function timeoutFunc() {
+          // Only update DOM node graph when we have time to spare to call
+          // numDomNodes(), which is a fairly expensive function.
+          requestIdleCallback(() => {
+            domPanel.update(self.numDomNodes(document.body), 1500);
+            setTimeout(timeoutFunc, 100);
+          });
+        }, 100);
+      }
+    },
+    numDomNodes(node) {
+      if (!node.children || node.children.length == 0) return 0;
+      let childrenCount = Array.from(node.children).map(this.numDomNodes);
+      return (
+        node.children.length +
+        childrenCount.reduce(function (p, c) {
+          return p + c;
+        }, 0)
+      );
     },
   },
   beforeMount() {

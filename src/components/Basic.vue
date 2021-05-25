@@ -1,6 +1,9 @@
 <template>
   <div class="scroll-basic-container" id="scrollContainer">
-    <div id="contentContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4">
+    <div
+      id="contentContainer"
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 p-4"
+    >
       <div
         v-for="item in list"
         :key="item.id"
@@ -11,7 +14,11 @@
         >
           <div class="img h-full img-max-height overflow-hidden relative">
             <img class="object-fit" :src="item.image" />
-            <div class="absolute top-0 left-0 p-3 bg-clip-padding bg-yellow-500 font-extrabold rounded-br-lg text-white">{{ item.imDbRating }}</div>
+            <div
+              class="absolute top-0 left-0 p-3 bg-clip-padding bg-yellow-500 font-extrabold rounded-br-lg text-white"
+            >
+              {{ item.imDbRating }}
+            </div>
           </div>
           <div class="p-4 h-full">
             <div class="font-bold text-xl">
@@ -28,6 +35,7 @@
 <script>
 // import axios from "axios";
 import Data from "./data";
+import Stats from "./stats.min";
 export default {
   name: "Basic",
   data() {
@@ -40,6 +48,9 @@ export default {
     };
   },
   watch: {},
+  created() {
+    this.addStatsPanel();
+  },
   methods: {
     getMovies() {
       // not using api since its got limit 100 api call per day
@@ -67,7 +78,10 @@ export default {
       let scrollContainer = document.getElementById("scrollContainer");
       let contentContainer = document.getElementById("contentContainer");
       scrollContainer.onscroll = () => {
-        if ((scrollContainer.scrollTop+scrollContainer.offsetHeight) >= (contentContainer.offsetHeight*0.70)) {
+        if (
+          scrollContainer.scrollTop + scrollContainer.offsetHeight >=
+          contentContainer.offsetHeight * 0.7
+        ) {
           this.loadmore();
         }
       };
@@ -79,8 +93,36 @@ export default {
         if (this.size * this.page > this.movieList.length) {
           this.eod = true;
         }
-        console.log(this.list.length)
+        console.log(this.list.length);
       }
+    },
+    addStatsPanel() {
+      if (window.requestIdleCallback) {
+        let self = this;
+        let stats = new Stats();
+        let domPanel = new Stats.Panel("D", "#0ff", "#002");
+        stats.addPanel(domPanel);
+        stats.showPanel(3);
+        document.body.appendChild(stats.dom);
+        setTimeout(function timeoutFunc() {
+          // Only update DOM node graph when we have time to spare to call
+          // numDomNodes(), which is a fairly expensive function.
+          requestIdleCallback(() => {
+            domPanel.update(self.numDomNodes(document.body), 1500);
+            setTimeout(timeoutFunc, 100);
+          });
+        }, 100);
+      }
+    },
+    numDomNodes(node) {
+      if (!node.children || node.children.length == 0) return 0;
+      let childrenCount = Array.from(node.children).map(this.numDomNodes);
+      return (
+        node.children.length +
+        childrenCount.reduce(function (p, c) {
+          return p + c;
+        }, 0)
+      );
     },
   },
   beforeMount() {
